@@ -4,6 +4,8 @@
 //see http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html
 //for more details about the functions
 
+#include <opencv2/core/types_c.h>
+
 namespace aslamcv_helper {
 
 using namespace cv;
@@ -20,12 +22,12 @@ using namespace cv;
 ///
 template<typename CAMERA_T>
 static void icvGetRectangles(boost::shared_ptr<CAMERA_T> camera_geometry,
-                             CvSize imgSize, cv::Rect_<float>& inner,
+                             cv::Size imgSize, cv::Rect_<float>& inner,
                              cv::Rect_<float>& outer) {
   const int N = 9;
   int x, y, k;
-  cv::Ptr<CvMat> _pts(cvCreateMat(1, N * N, CV_32FC2));
-  CvPoint2D32f* pts = (CvPoint2D32f*) (_pts->data.ptr);
+  cv::Ptr<cv::Mat> _pts( new cv::Mat(1, N * N, CV_32FC2));
+  CvPoint2D32f* pts = (CvPoint2D32f*) (_pts->data);
 
   for (y = k = 0; y < N; y++) {
     for (x = 0; x < N; x++) {
@@ -85,8 +87,8 @@ static void icvGetRectangles(boost::shared_ptr<CAMERA_T> camera_geometry,
 ///
 template<typename CAMERA_T>
 Eigen::Matrix3d getOptimalNewCameraMatrix(
-    boost::shared_ptr<CAMERA_T> camera_geometry, CvSize imgSize, double alpha,
-    CvSize newImgSize) {
+    boost::shared_ptr<CAMERA_T> camera_geometry, cv::Size imgSize, double alpha,
+    cv::Size newImgSize) {
 
   cv::Rect_<float> inner, outer;
   newImgSize = newImgSize.width * newImgSize.height != 0 ? newImgSize : imgSize;

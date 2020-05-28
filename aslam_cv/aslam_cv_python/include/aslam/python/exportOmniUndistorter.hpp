@@ -13,7 +13,7 @@ namespace cameras {
 typedef Eigen::Matrix<boost::uint8_t, Eigen::Dynamic, Eigen::Dynamic> image_t;
 
 template<typename MASK_T>
-image_t undistortImageNumpyCvmat(const OmniUndistorter<MASK_T> *instance, const image_t & image_eigen)
+image_t undistortImageNumpyCvMat(const OmniUndistorter<MASK_T> *instance, const image_t & image_eigen)
 {
   cv::Mat image_cv, image_cv_undist;
   eigen2cv(image_eigen, image_cv);
@@ -27,7 +27,7 @@ image_t undistortImageNumpyCvmat(const OmniUndistorter<MASK_T> *instance, const 
 }
 
 template<typename MASK_T>
-image_t undistortImageToPinholeNumpyCvmat(const OmniUndistorter<MASK_T> *instance, const image_t & image_eigen)
+image_t undistortImageToPinholeNumpyCvMat(const OmniUndistorter<MASK_T> *instance, const image_t & image_eigen)
 {
   cv::Mat image_cv, image_cv_undist;
   eigen2cv(image_eigen, image_cv);
@@ -56,12 +56,12 @@ void exportOmniUndistorter(const std::string & name) {
           (name + "(distortedGeometry, interpolation, alpha, scale)").c_str()))
       .def("init", &OmniUndistorter<mask_t>::init)
       .def("constructUndistortedFrame", &OmniUndistorter<mask_t>::constructUndistortedFrame)
-      .def("undistortImage", &undistortImageNumpyCvmat<mask_t>)
+      .def("undistortImage", &undistortImageNumpyCvMat<mask_t>)
       .def("undistortImage", &OmniUndistorter<mask_t>::undistortImage)
       .def("getIdealGeometry", &OmniUndistorter<mask_t>::idealGeometry)
       .def("getIdealPinholeGeometry", &OmniUndistorter<mask_t>::idealPinholeGeometry)
       .def("undistortImageToPinhole", &OmniUndistorter<mask_t>::undistortImageToPinhole)
-      .def("undistortImageToPinhole", &undistortImageToPinholeNumpyCvmat<mask_t>);
+      .def("undistortImageToPinhole", &undistortImageToPinholeNumpyCvMat<mask_t>);
 
 }
 

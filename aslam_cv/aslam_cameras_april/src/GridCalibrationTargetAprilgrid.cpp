@@ -3,6 +3,7 @@
 #include <Eigen/Core>
 #include <opencv2/core/core.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/imgproc/imgproc_c.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <boost/make_shared.hpp>
 #include <sm/assert_macros.hpp>
@@ -164,10 +165,10 @@ bool GridCalibrationTargetAprilgrid::computeObservation(
         //show the duplicate tags in the image
         cv::destroyAllWindows();
         cv::namedWindow("Wild Apriltag detected. Hide them!");
-        cvStartWindowThread();
+        cv::startWindowThread();
 
         cv::Mat imageCopy = image.clone();
-        cv::cvtColor(imageCopy, imageCopy, CV_GRAY2RGB);
+        cv::cvtColor(imageCopy, imageCopy, cv::COLOR_GRAY2RGB);
 
         //mark all duplicate tags in image
         for (int j = 0; i < detections.size() - 1; i++) {
@@ -178,10 +179,10 @@ bool GridCalibrationTargetAprilgrid::computeObservation(
         }
 
         cv::putText(imageCopy, "Duplicate Apriltags detected. Hide them.",
-                    cv::Point(50, 50), CV_FONT_HERSHEY_SIMPLEX, 0.8,
+                    cv::Point(50, 50), cv::FONT_HERSHEY_SIMPLEX, 0.8,
                     CV_RGB(255,0,0), 2, 8, false);
         cv::putText(imageCopy, "Press enter to exit...", cv::Point(50, 80),
-                    CV_FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(255,0,0), 2, 8, false);
+                    cv::FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(255,0,0), 2, 8, false);
         cv::imshow("Duplicate Apriltags detected. Hide them", imageCopy);  // OpenCV call
 
         // and exit
@@ -222,7 +223,7 @@ bool GridCalibrationTargetAprilgrid::computeObservation(
   if (_options.showExtractionVideo) {
     //image with refined (blue) and raw corners (red)
     cv::Mat imageCopy1 = image.clone();
-    cv::cvtColor(imageCopy1, imageCopy1, CV_GRAY2RGB);
+    cv::cvtColor(imageCopy1, imageCopy1, cv::COLOR_GRAY2RGB);
     for (unsigned i = 0; i < detections.size(); i++)
       for (unsigned j = 0; j < 4; j++) {
         //raw apriltag corners
@@ -237,7 +238,7 @@ bool GridCalibrationTargetAprilgrid::computeObservation(
 
         if (!success)
           cv::putText(imageCopy1, "Detection failed! (frame not used)",
-                      cv::Point(50, 50), CV_FONT_HERSHEY_SIMPLEX, 0.8,
+                      cv::Point(50, 50), cv::FONT_HERSHEY_SIMPLEX, 0.8,
                       CV_RGB(255,0,0), 3, 8, false);
       }
 
@@ -246,7 +247,9 @@ bool GridCalibrationTargetAprilgrid::computeObservation(
 
     /* copy image for modification */
     cv::Mat imageCopy2 = image.clone();
-    cv::cvtColor(imageCopy2, imageCopy2, CV_GRAY2RGB);
+
+
+    cv::cvtColor(imageCopy2, imageCopy2, cv::COLOR_GRAY2RGB);
     /* highlight detected tags in image */
     for (unsigned i = 0; i < detections.size(); i++) {
       detections[i].draw(imageCopy2);
